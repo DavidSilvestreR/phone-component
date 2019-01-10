@@ -1,0 +1,62 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="musuc-component">
+    
+    <template>
+        <style>
+            :host{
+                text-align: center;
+            }
+            .audiotag{
+                width:100%;
+            }
+            img{
+                width: 80%;
+            }
+        </style>
+        <img src="/src/barras.gif" alt="Italian Trulli">
+        <audio class="audiotag" controls  id="musong">
+            <source src="/src/song.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+        </audio>
+    </template>
+    <script>
+        class MusucComponent extends Polymer.Element{
+            static get is(){ return "musuc-component"}
+            static get properties(){
+                return{
+                    lowBatery:{
+                        type:Number,
+                        value:2
+                    }
+                }
+            }
+            ready() {
+                super.ready();
+                this.getAudio()
+            }
+            getAudio(){
+                let vid=this.$.musong
+                vid.ontimeupdate=()=>{
+                  if( Math.round(vid.currentTime)%2===0){
+                      this.set("lowBatery",Math.round(vid.currentTime))
+                      this.lowBaterydispatch()
+                  }
+                }
+            }
+            lowBaterydispatch(){
+                this.dispatchEvent(new CustomEvent('low-batery', {
+                    bubbles: false,
+                    composed: false,
+                    detail: {
+                        value:this.lowBatery
+                    }
+                }));
+            }
+            
+            
+        }
+        window.customElements.define(MusucComponent.is,MusucComponent)
+    </script>
+    
+</dom-module>

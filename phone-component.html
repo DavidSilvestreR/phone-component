@@ -1,0 +1,127 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="/music-component.html">
+<link rel="import" href="/battery-component.html">
+<link rel="import" href="/charger-component.html">
+<dom-module id="phone-component">
+  <template>
+    <style>
+      :host {
+        display: block;
+        height:450px;
+        width: 250px;
+        background:black;
+        padding: 20px 11px;
+        margin: auto;
+        border-radius: 30px;
+        border:5px solid white;
+      }
+      .pantalla{
+        background: white;
+        height: 88%;
+        border-radius: 15px;
+        margin-top: 25px;
+      }
+      header{
+        width: auto;
+        background: #dadcdb;
+        border-radius: 3px 3px 0 0;
+        padding:0px 5px;
+      }
+      main{
+        position: relative;
+        text-align: center;
+      }
+      musuc-component{
+        position: relative;
+        top:10%;
+        top: 63px;
+      }
+      .insidebuton{
+        border-radius: 50%;
+        border:1px solid white;
+        width: 35px;
+        height: 35px;
+        margin: auto;
+        margin-top: 7px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .cuadro{
+        width: 15px;
+      height: 15px;
+      border: 2px solid white;
+      border-radius: 6px;
+      }
+    </style>
+        
+        
+        <main class="pantalla">
+            <header>
+                <battery-component low="[[batery]]"  cargerbatery="[[charger]]" state-logo=[[chargerLogo]]></battery-component>
+            </header>
+            
+            <musuc-component on-low-batery="getBatery"></musuc-component>
+            <charger-component charger-phone  on-charger-batery="chargerBatery"></charger-component>
+        </main>
+        <div class="button">
+             <div class="insidebuton">
+                  <div class="cuadro"></div>
+             </div>
+        </div>
+        
+    
+    
+  </template>
+
+  <script>
+    /**
+     * `phone-component`
+     * 
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class PhoneComponent extends Polymer.Element {
+      static get is() { return 'phone-component'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'phone-component'
+          },
+          batery:{
+            type:Number,
+            value:0
+          },
+          charger:{
+            type:Number,
+            value:0
+          },
+          balue:{
+            type:String,
+            value:"true"
+          },
+          chargerLogo:{
+            type:String,
+            value:"none"
+
+          }
+        };
+      }
+      getBatery(event){
+        this.set("batery",event.detail.value)
+      }
+      chargerBatery(event){
+        this.set('charger',event.detail.value)
+        if(event.detail.state=="charger"){
+          this.set("chargerLogo","block")
+        }
+      }
+    
+    }
+
+    window.customElements.define(PhoneComponent.is, PhoneComponent);
+  </script>
+</dom-module>

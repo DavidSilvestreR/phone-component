@@ -1,0 +1,48 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="/charger-component.html">
+<dom-module id="charger-component">
+    <template>
+        <style></style>
+       
+    </template>
+    <script>
+        class ChargerComponent extends Polymer.Element {
+            static get is() { return 'charger-component' }
+            static get properties() {
+                return {
+                    interval: Event,
+                    charger: {
+                        type: Number,
+                        value: 0
+                    },
+                    chargerPhone: {
+                        type: Boolean,
+                        value: false,
+                        observer: '_setBatery'
+                    }
+                    
+                }
+            }
+            
+            _setBatery() {
+                if (this.chargerPhone) {
+                    this.interval = setInterval(() => {
+                        this.set("charger",this.charger+1)
+                        this.dispatchEvent(new CustomEvent('charger-batery', {
+                            bubbles: false,
+                            composed: false,
+                            detail: {
+                                value: this.charger,
+                                state: "charger"
+                            }
+                        }));
+                    },10000);
+                } else {
+                    clearInterval(this.interval);
+                }
+            }
+
+        }
+        window.customElements.define(ChargerComponent.is, ChargerComponent)
+    </script>
+</dom-module>

@@ -1,0 +1,98 @@
+<link rel="import" href="../polymer/polymer-element.html">
+ <dom-module id="battery-component">
+     <template>
+         <style>
+             .batery{
+                 display: flex;
+                 justify-content: flex-end;
+                align-items: center;
+             }
+             h2{
+                 text-align: left;
+                 font-size:12px;
+                 margin: 0px;
+                 margin-right:5px;
+             }
+             .seebatery{
+                 width: 50px;
+                 height: 15px;;
+                 background:white;
+                 border:1px solid #cccc;
+                 transform: rotate(180deg);
+                 position: relative;
+             }
+             .charger{
+                 width: 100%;
+                 height: 100%;
+                 background: green;
+             }
+             .chargerlogo{
+                position: absolute;
+                z-index: 1;
+                top: 1px;
+                transform: rotate(39deg);
+                font-size: 13px;
+                left: 22px;
+                font-weight: 600;
+                color: #faff3e;
+             }
+         </style>
+        
+         <div class="batery">
+                <h2>[[lowBatery]]%</h2>
+                <div class="seebatery">
+                    <div class="charger" style$="width:{{lowBatery}}%; background:#{{colorBatery}}"></div>
+                    <span class="chargerlogo" style$="display:{{stateLogo}}">ϟ</span>
+                </div>
+        </div>    
+     </template>
+    <script>
+        class BatteryComponent extends Polymer.Element{
+            static get is(){ return "battery-component"}
+            static get properties(){
+                return{
+                    lowBatery:{
+                        type:Number,
+                        value:101
+                    },
+                    low:{
+                        type:Number,
+                        value:0,
+                        observer:'_lownumber'
+                    },
+                    cargerbatery:{
+                        type:Number,
+                        value:0,
+                        observer:'_sumBatery'
+                    },
+                    colorBatery:{
+                        type:String,
+                        value:"008000"
+                    },
+                    stateLogo:{
+                        type:String,
+                        value:"none"
+                    }
+                }
+            }
+            _lownumber(){
+                if(this.lowBatery>0){
+                    this.set("lowBatery",this.lowBatery-1)
+                    console.log(this.lowBatery)
+                    if(this.lowBatery<60 && this.lowBatery>50){
+                        this.set("colorBatery","f7e244")
+                    }else if(this.lowBatery<40){
+                        this.set("colorBatery","f33a00")
+                    }
+                }
+               
+            }
+            _sumBatery(){
+                if(this.lowBatery<100){
+                    this.set('lowBatery',this.lowBatery+2)
+                }
+            }
+        }
+        window.customElements.define(BatteryComponent.is,BatteryComponent)
+    </script>
+</dom-module>
